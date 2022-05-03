@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.homework63.databinding.FragmentLessonBinding
-import java.util.ArrayList
 
 class LessonFragment : Fragment() {
 private lateinit var binding : FragmentLessonBinding
@@ -16,7 +15,7 @@ private val data = arrayListOf<Lessons>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLessonBinding.inflate(LayoutInflater.from(requireContext()),container,false)
         return binding.root
     }
@@ -24,7 +23,9 @@ private val data = arrayListOf<Lessons>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadData()
-        adapter = LessonAdapter(data)
+        adapter = LessonAdapter(data,{
+            requireContext().showToast(it.toString())
+        })
         binding.recycle.layoutManager = GridLayoutManager(requireContext(),2)
         binding.recycle.adapter = adapter
     }
@@ -37,6 +38,9 @@ private val data = arrayListOf<Lessons>()
         data.add(Lessons("Chemistry","https://www.shareicon.net/data/512x512/2016/04/14/749410_education_512x512.png",R.color.blue,R.color.blue_two))
         data.add(Lessons("Geography","https://cdn-icons-png.flaticon.com/512/2784/2784487.png",R.color.purple,R.color.purple_two))
         data.add(Lessons("Literature","https://www.pngall.com/wp-content/uploads/2018/05/Books-PNG-File.png",R.color.orange,R.color.orange_two))
-
+if (arguments != null){
+    val lesson :Lessons = arguments?.getSerializable("lesson") as Lessons
+    data.add(lesson)
+}
     }
 }
